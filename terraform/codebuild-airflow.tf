@@ -83,6 +83,13 @@ data "aws_iam_policy_document" "codebuild-airflow-basic" {
     ]
     resources = ["*"]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+    ]
+    resources = ["arn:aws:secretsmanager:ap-northeast-1:711930837542:secret:codebuild/managed-airflow-practice-EeuOvA"]
+  }
 }
 
 resource "aws_iam_policy" "codebuild-airflow-basic" {

@@ -38,7 +38,7 @@ resource "aws_codebuild_project" "airflow" {
 
   name           = "managed-airflow-practice-airflow"
   queued_timeout = "480"
-  service_role   = "arn:aws:iam::711930837542:role/service-role/codebuild-terraform-service-role"
+  service_role   = aws_iam_role.codebuild-airflow.arn
 
   source {
     buildspec       = ".codebuild/airflow.buildspec.yaml"
@@ -72,6 +72,28 @@ resource "aws_iam_role" "codebuild-airflow" {
   assume_role_policy = data.aws_iam_policy_document.codebuild-airflow-assume-role.json
 }
 
+data "aws_iam_policy_document" "codebuild-airflow-basic" {
+  version = "2012-10-17"
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = [
+      "arn:aws:s3:::yuyat-apache-airflow-test",
+      "arn:aws:s3:::yuyat-apache-airflow-test/*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "codebuild-airflow-basic" {
+  name   = "codebuild-managed-airflow-practice-airflow-basic"
+  policy = data.aws_iam_policy_document.codebuild-airflow-basic.json
+}
+
 data "aws_iam_policy_document" "codebuild-airflow-s3" {
   version = "2012-10-17"
   statement {
@@ -89,14 +111,19 @@ data "aws_iam_policy_document" "codebuild-airflow-s3" {
   }
 }
 
-resource "aws_iam_policy" "codebuild-airflow" {
-  name   = "codebuild-managed-airflow-practice-airflow"
+resource "aws_iam_policy" "codebuild-airflow-s3" {
+  name   = "codebuild-managed-airflow-practice-airflow-s3"
   policy = data.aws_iam_policy_document.codebuild-airflow-s3.json
 }
 
-resource "aws_iam_role_policy_attachment" "codebuild-airflow" {
+resource "aws_iam_role_policy_attachment" "codebuild-airflow-basic" {
   role       = aws_iam_role.codebuild-airflow.name
-  policy_arn = aws_iam_policy.codebuild-airflow.arn
+  policy_arn = aws_iam_policy.codebuild-airflow-basic.arn
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild-airflow-s3" {
+  role       = aws_iam_role.codebuild-airflow.name
+  policy_arn = aws_iam_policy.codebuild-airflow-s3.arn
 }
 
 resource "aws_codebuild_webhook" "airflow" {

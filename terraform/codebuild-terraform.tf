@@ -38,7 +38,7 @@ resource "aws_codebuild_project" "terraform" {
 
   name           = "managed-airflow-practice-terraform"
   queued_timeout = "480"
-  service_role   = "arn:aws:iam::711930837542:role/service-role/codebuild-terraform-service-role"
+  service_role   = aws_iam_role.codebuild-terraform.arn
 
   source {
     buildspec       = ".codebuild/terraform.buildspec.yaml"

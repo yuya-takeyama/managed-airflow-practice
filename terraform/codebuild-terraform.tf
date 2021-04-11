@@ -88,7 +88,7 @@ resource "aws_codebuild_webhook" "terraform" {
 
     filter {
       type    = "FILE_PATH"
-      pattern = "^terraformm/.*"
+      pattern = "^(terraformm|scripts/terraform)/.*"
     }
   }
 }

@@ -110,7 +110,7 @@ resource "aws_codebuild_webhook" "airflow" {
 
     filter {
       type    = "FILE_PATH"
-      pattern = "^environments/.*"
+      pattern = "^(environments|scripts/airflow)/.*"
     }
   }
 }

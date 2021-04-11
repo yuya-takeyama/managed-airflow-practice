@@ -17,8 +17,8 @@ resource "aws_codebuild_project" "terraform" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:4.0"
-    image_pull_credentials_type = "CODEBUILD"
+    image                       = "hashicorp/terraform:0.14.3"
+    image_pull_credentials_type = "SERVICE_ROLE"
     privileged_mode             = "false"
     type                        = "LINUX_CONTAINER"
   }

@@ -41,7 +41,7 @@ resource "aws_codebuild_project" "terraform" {
   service_role   = "arn:aws:iam::711930837542:role/service-role/codebuild-terraform-service-role"
 
   source {
-    buildspec       = ".codebuild/buildspec.yml"
+    buildspec       = ".codebuild/terraform.buildspec.yaml"
     git_clone_depth = "1"
 
     git_submodules_config {
@@ -72,9 +72,8 @@ resource "aws_iam_role" "codebuild-terraform" {
   assume_role_policy = data.aws_iam_policy_document.codebuild-terraform-assume-role.json
 }
 
-resource "aws_iam_policy_attachment" "codebuild-terraform" {
-  name       = "codebuild"
-  roles      = [aws_iam_role.codebuild-terraform.name]
+resource "aws_iam_role_policy_attachment" "codebuild-terraform" {
+  role       = aws_iam_role.codebuild-terraform.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
@@ -89,7 +88,7 @@ resource "aws_codebuild_webhook" "terraform" {
 
     filter {
       type    = "FILE_PATH"
-      pattern = "^terraformm/.*"
+      pattern = "^(terraformm|scripts/terraform)/.*"
     }
   }
 }

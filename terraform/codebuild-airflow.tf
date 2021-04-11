@@ -41,7 +41,7 @@ resource "aws_codebuild_project" "airflow" {
   service_role   = "arn:aws:iam::711930837542:role/service-role/codebuild-terraform-service-role"
 
   source {
-    buildspec       = ".codebuild/buildspec.yml"
+    buildspec       = ".codebuild/airflow.buildspec.yaml"
     git_clone_depth = "1"
 
     git_submodules_config {
@@ -94,9 +94,8 @@ resource "aws_iam_policy" "codebuild-airflow" {
   policy = data.aws_iam_policy_document.codebuild-airflow-s3.json
 }
 
-resource "aws_iam_policy_attachment" "codebuild-airflow" {
-  name       = "codebuild"
-  roles      = [aws_iam_role.codebuild-airflow.name]
+resource "aws_iam_role_policy_attachment" "codebuild-airflow" {
+  role       = aws_iam_role.codebuild-airflow.name
   policy_arn = aws_iam_policy.codebuild-airflow.arn
 }
 
@@ -111,7 +110,7 @@ resource "aws_codebuild_webhook" "airflow" {
 
     filter {
       type    = "FILE_PATH"
-      pattern = "^environments/.*"
+      pattern = "^(environments|scripts/airflow)/.*"
     }
   }
 }

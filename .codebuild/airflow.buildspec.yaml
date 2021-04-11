@@ -1,0 +1,15 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    GITHUB_TOKEN: codebuild/managed-airflow-practice:GITHUB_TOKEN
+
+phases:
+  build:
+    commands:
+      - |
+        if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/main" ]; then
+          ./scripts/airflow/sync.sh
+        else
+          ./scripts/airflow/dryrun.sh
+        fi

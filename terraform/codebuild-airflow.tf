@@ -77,15 +77,11 @@ data "aws_iam_policy_document" "codebuild-airflow-basic" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:ListBucket",
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
     ]
-    resources = [
-      "arn:aws:s3:::yuyat-apache-airflow-test",
-      "arn:aws:s3:::yuyat-apache-airflow-test/*",
-    ]
+    resources = ["*"]
   }
 }
 

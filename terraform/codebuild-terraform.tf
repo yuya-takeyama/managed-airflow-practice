@@ -17,8 +17,8 @@ resource "aws_codebuild_project" "terraform" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:4.0"
-    image_pull_credentials_type = "CODEBUILD"
+    image                       = "hashicorp/terraform:0.14.3"
+    image_pull_credentials_type = "SERVICE_ROLE"
     privileged_mode             = "false"
     type                        = "LINUX_CONTAINER"
   }
@@ -38,7 +38,7 @@ resource "aws_codebuild_project" "terraform" {
 
   name           = "managed-airflow-practice-terraform"
   queued_timeout = "480"
-  service_role   = "arn:aws:iam::711930837542:role/service-role/codebuild-terraform-service-role"
+  service_role   = aws_iam_role.codebuild-terraform.arn
 
   source {
     buildspec       = ".codebuild/terraform.buildspec.yaml"
@@ -88,7 +88,7 @@ resource "aws_codebuild_webhook" "terraform" {
 
     filter {
       type    = "FILE_PATH"
-      pattern = "^(terraformm|scripts/terraform)/.*"
+      pattern = "^(terraform|scripts/terraform)/.*"
     }
   }
 }

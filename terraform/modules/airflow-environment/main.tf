@@ -36,4 +36,31 @@ resource "aws_mwaa_environment" "this" {
   source_bucket_arn = "arn:aws:s3:::yuyat-apache-airflow-test"
 
   webserver_access_mode = var.webserver_access_mode
+
+  logging_configuration {
+    dag_processing_logs {
+      enabled   = true
+      log_level = "INFO"
+    }
+
+    scheduler_logs {
+      enabled   = true
+      log_level = "INFO"
+    }
+
+    task_logs {
+      enabled   = true
+      log_level = "INFO"
+    }
+
+    webserver_logs {
+      enabled   = true
+      log_level = "INFO"
+    }
+
+    worker_logs {
+      enabled   = true
+      log_level = "INFO"
+    }
+  }
 }

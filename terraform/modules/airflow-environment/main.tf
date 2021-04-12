@@ -27,6 +27,7 @@ resource "aws_mwaa_environment" "this" {
   name               = "managed-airflow-practice-${replace(var.environment_name, "/", "--")}"
   dag_s3_path        = "${var.environment_name}/dags/"
   execution_role_arn = aws_iam_role.this.arn
+  environment_class  = "mw1.medium"
 
   network_configuration {
     security_group_ids = var.security_group_ids

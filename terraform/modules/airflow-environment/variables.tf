@@ -7,6 +7,10 @@ variable "webserver_access_mode" {
   default = "PRIVATE_ONLY"
 }
 
+variable "execution_role_basic_policy_arn" {
+  type = string
+}
+
 variable "security_group_ids" {
   type = list(string)
 }

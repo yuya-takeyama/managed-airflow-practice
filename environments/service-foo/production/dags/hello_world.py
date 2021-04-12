@@ -1,10 +1,12 @@
-from datetime import datetime
+import datetime
+import logging
+
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 
-def print_hello():
-  return 'Hello Wolrd'
+def greet_hello():
+    logging.info("Hello World")
 
-dag = DAG('hello_world', description='Hello world example', schedule_interval='* * * * *', start_date=datetime(2017, 3, 20), catchup=False)
+dag = DAG("FirstDag", start_date=datetime.datetime.now(),schedule_interval=None)
 
-hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello, dag=dag)
+first_task = PythonOperator(python_callable=greet_hello , dag=dag , task_id="first-task")

@@ -20,3 +20,18 @@ module "service-foo-production" {
 
   webserver_access_mode = "PUBLIC_ONLY"
 }
+
+module "service-foo-staging" {
+  source = "./modules/airflow-environment"
+
+  aws_region_name = local.aws_region_name
+  aws_account_id  = local.aws_account_id
+
+  environment_name  = "service-foo/staging"
+  source_bucket_arn = aws_s3_bucket.bucket.arn
+
+  security_group_ids = local.security_group_ids
+  subnet_ids         = local.subnet_ids
+
+  webserver_access_mode = "PUBLIC_ONLY"
+}

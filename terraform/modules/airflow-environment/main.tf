@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
       "airflow:PublishMetrics",
     ]
     resources = [
-      "arn:aws:airflow:${var.aws_region_name}:${var.aws_account_id}:environment/${local.normalized_environment_name}"
+      aws_mwaa_environment.this.arn,
     ]
   }
 
@@ -67,7 +67,7 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
       "logs:DescribeLogGroups",
     ]
     resources = [
-      "arn:aws:logs:${var.aws_region_name}:${var.aws_account_id}:log-group:airflow-${local.normalized_environment_name}-*"
+      "arn:aws:logs:${var.aws_region_name}:${var.aws_account_id}:log-group:airflow-${aws_mwaa_environment.this.name}-*"
     ]
   }
 

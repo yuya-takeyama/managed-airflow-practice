@@ -35,25 +35,3 @@ resource "aws_s3_bucket_public_access_block" "example" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
-
-data "aws_iam_policy_document" "execution-role-basic-policy" {
-  version = "2012-10-17"
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetBucket*",
-      "s3:GetObject*",
-      "s3:List*",
-    ]
-    resources = [
-      "arn:aws:s3:::yuyat-apache-airflow-test",
-      "arn:aws:s3:::yuyat-apache-airflow-test/*",
-    ]
-  }
-}
-
-resource "aws_iam_policy" "execution-role-basic-policy" {
-  name   = "managed-airflow-practice-airflow-executioin-role-basic-policy"
-  policy = data.aws_iam_policy_document.execution-role-basic-policy.json
-}
-

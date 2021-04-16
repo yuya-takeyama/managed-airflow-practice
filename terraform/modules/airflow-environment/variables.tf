@@ -1,14 +1,22 @@
+variable "aws_account_id" {
+  type = string
+}
+
+variable "aws_region_name" {
+  type = string
+}
+
 variable "environment_name" {
+  type = string
+}
+
+variable "source_bucket_arn" {
   type = string
 }
 
 variable "webserver_access_mode" {
   type    = string
   default = "PRIVATE_ONLY"
-}
-
-variable "execution_role_basic_policy_arn" {
-  type = string
 }
 
 variable "security_group_ids" {

@@ -1,19 +1,22 @@
 locals {
+  aws_region_name = "ap-northeast-1"
+  aws_account_id  = "711930837542"
+
   security_group_ids = [module.vpc.default_security_group_id]
   subnet_ids         = slice(module.vpc.private_subnets, 0, 2)
-
-  execution_role_basic_policy_arn = aws_iam_policy.execution-role-basic-policy.arn
 }
 
 module "service-foo-production" {
   source = "./modules/airflow-environment"
 
-  environment_name = "service-foo/production"
+  aws_region_name = local.aws_region_name
+  aws_account_id  = local.aws_account_id
+
+  environment_name  = "service-foo/production"
+  source_bucket_arn = aws_s3_bucket.bucket.arn
 
   security_group_ids = local.security_group_ids
   subnet_ids         = local.subnet_ids
-
-  execution_role_basic_policy_arn = local.execution_role_basic_policy_arn
 
   webserver_access_mode = "PUBLIC_ONLY"
 }

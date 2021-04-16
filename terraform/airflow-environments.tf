@@ -12,7 +12,7 @@ module "service-foo-production" {
   aws_region_name = local.aws_region_name
   aws_account_id  = local.aws_account_id
 
-  environment_name  = "service-foo/production"
+  environment_id    = "service-foo/production"
   source_bucket_arn = aws_s3_bucket.bucket.arn
 
   security_group_ids = local.security_group_ids
@@ -27,7 +27,7 @@ module "service-foo-staging" {
   aws_region_name = local.aws_region_name
   aws_account_id  = local.aws_account_id
 
-  environment_name  = "service-foo/staging"
+  environment_id    = "service-foo/staging"
   source_bucket_arn = aws_s3_bucket.bucket.arn
 
   security_group_ids = local.security_group_ids

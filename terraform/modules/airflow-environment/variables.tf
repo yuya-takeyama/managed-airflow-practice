@@ -6,7 +6,7 @@ variable "aws_region_name" {
   type = string
 }
 
-variable "environment_name" {
+variable "environment_id" {
   type = string
 }
 

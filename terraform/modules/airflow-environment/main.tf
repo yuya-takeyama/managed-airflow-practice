@@ -1,5 +1,8 @@
 locals {
-  normalized_environment_name = replace(var.environment_name, "/", "--")
+  resource_prefix           = "mwaa-practice-"
+  normalized_environment_id = replace(var.environment_id, "/", "--")
+  mwaa_environment_name     = "${local.resource_prefix}${local.normalized_environment_id}"
+  mwaa_environment_arn      = "arn:aws:airflow:${var.aws_region_name}:${var.aws_account_id}:environment/${local.mwaa_environment_name}"
 }
 
 data "aws_iam_policy_document" "airflow-assume-role" {
@@ -26,7 +29,7 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
       "airflow:PublishMetrics",
     ]
     resources = [
-      aws_mwaa_environment.this.arn,
+      local.mwaa_environment_arn,
     ]
   }
 
@@ -67,7 +70,7 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
       "logs:DescribeLogGroups",
     ]
     resources = [
-      "arn:aws:logs:${var.aws_region_name}:${var.aws_account_id}:log-group:airflow-${aws_mwaa_environment.this.name}-*"
+      "arn:aws:logs:${var.aws_region_name}:${var.aws_account_id}:log-group:airflow-${local.mwaa_environment_name}-*"
     ]
   }
 
@@ -108,7 +111,7 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
       "arn:aws:kms:*:${var.aws_account_id}:key/*"
     ]
     condition {
-      test = "StringLike"
+      test     = "StringLike"
       variable = "kms:ViaService"
       values = [
         "sqs.${var.aws_region_name}.amazonaws.com",
@@ -118,24 +121,24 @@ data "aws_iam_policy_document" "execution-role-basic-policy" {
   }
 }
 
-resource "aws_iam_policy" "execution-role-basic-policy" {
-  name   = "managed-airflow-practice-${local.normalized_environment_name}-basic"
+resource "aws_iam_policy" "this" {
+  name   = "${local.mwaa_environment_name}-basic"
   policy = data.aws_iam_policy_document.execution-role-basic-policy.json
 }
 
 resource "aws_iam_role" "this" {
-  name               = "airflow-environment-${local.normalized_environment_name}"
+  name               = local.mwaa_environment_name
   assume_role_policy = data.aws_iam_policy_document.airflow-assume-role.json
 }
 
-resource "aws_iam_role_policy_attachment" "execution-role-basic-policy" {
+resource "aws_iam_role_policy_attachment" "this" {
   role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.execution-role-basic-policy.arn
+  policy_arn = aws_iam_policy.this.arn
 }
 
 resource "aws_mwaa_environment" "this" {
-  name               = "managed-airflow-practice-${local.normalized_environment_name}"
-  dag_s3_path        = "${var.environment_name}/dags/"
+  name               = local.mwaa_environment_name
+  dag_s3_path        = "${var.environment_id}/dags/"
   execution_role_arn = aws_iam_role.this.arn
   environment_class  = "mw1.medium"
 
@@ -174,4 +177,8 @@ resource "aws_mwaa_environment" "this" {
       log_level = "INFO"
     }
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.this,
+  ]
 }

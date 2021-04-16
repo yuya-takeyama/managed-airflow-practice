@@ -5,19 +5,6 @@ locals {
   execution_role_basic_policy_arn = aws_iam_policy.execution-role-basic-policy.arn
 }
 
-module "service-foo-staging" {
-  source = "./modules/airflow-environment"
-
-  environment_name = "service-foo/staging"
-
-  security_group_ids = local.security_group_ids
-  subnet_ids         = local.subnet_ids
-
-  execution_role_basic_policy_arn = local.execution_role_basic_policy_arn
-
-  webserver_access_mode = "PUBLIC_ONLY"
-}
-
 module "service-foo-production" {
   source = "./modules/airflow-environment"
 

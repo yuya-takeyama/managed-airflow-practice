@@ -49,7 +49,7 @@ sleep 3
 
 a = BashOperator(
     task_id='a',
-    bash_command=a_command,
+    bash_command=dag_run.conf['command'],
     dag=dag,
 )
 
@@ -94,5 +94,8 @@ f = BashOperator(
 )
 
 
-a >> [c_1, c_2, c_3] >> [d, e]
+a >> [c_1, c_2, c_3]
+c_1 >> [d, e]
+c_2 >> [d, e]
+c_3 >> [d, e]
 f << [b, d, e]

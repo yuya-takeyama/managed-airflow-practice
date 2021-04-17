@@ -49,7 +49,7 @@ sleep 3
 
 a = BashOperator(
     task_id='a',
-    bash_command="{{ dag_run.conf['command'] }}"
+    bash_command="{{ dag_run.conf['command'] }}",
     dag=dag,
 )
 

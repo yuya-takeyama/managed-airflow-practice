@@ -1,4 +1,5 @@
 from datetime import timedelta
+from random import randrange
 
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
@@ -39,43 +40,59 @@ dag = DAG(
     tags=['example'],
 )
 
-# t1, t2 and t3 are examples of tasks created by instantiating operators
-t1 = BashOperator(
-    task_id='print_date',
-    bash_command='date',
-    dag=dag,
-)
-
-t2 = BashOperator(
-    task_id='sleep',
-    depends_on_past=False,
-    bash_command='sleep 5',
-    retries=3,
-    dag=dag,
-)
-dag.doc_md = __doc__
-
-t1.doc_md = """\
-#### Task Documentation
-You can document your task using the attributes `doc_md` (markdown),
-`doc` (plain text), `doc_rst`, `doc_json`, `doc_yaml` which gets
-rendered in the UI's Task Instance Details page.
-![img](http://montcs.bloomu.edu/~bobmon/Semesters/2012-01/491/import%20soul.png)
-"""
-templated_command = """
-{% for i in range(5) %}
-    echo "{{ ds }}"
-    echo "{{ macros.ds_add(ds, 7)}}"
-    echo "{{ params.my_param }}"
-{% endfor %}
+a_command = """
+python --version
+pip --version
+pip list
+sleep 3
 """
 
-t3 = BashOperator(
-    task_id='templated',
-    depends_on_past=False,
-    bash_command=templated_command,
-    params={'my_param': 'Parameter I passed in'},
+a = BashOperator(
+    task_id='a',
+    bash_command=a_command,
     dag=dag,
 )
 
-t1 >> [t2, t3]
+b = BashOperator(
+    task_id='b',
+    bash_command='sleep 30',
+    dag=dag,
+)
+
+c_1 = BashOperator(
+    task_id='c_1',
+    bash_command='sleep ' + str(randrange(1,31)),
+    dag=dag,
+)
+c_2 = BashOperator(
+    task_id='c_2',
+    bash_command='sleep ' + str(randrange(1,31)),
+    dag=dag,
+)
+c_3 = BashOperator(
+    task_id='c_3',
+    bash_command='sleep ' + str(randrange(1,31)),
+    dag=dag,
+)
+
+d = BashOperator(
+    task_id='d',
+    bash_command='sleep ' + str(randrange(1, 3)),
+    dag=dag,
+)
+
+e = BashOperator(
+    task_id='e',
+    bash_command='sleep ' + str(randrange(1, 3)),
+    dag=dag,
+)
+
+f = BashOperator(
+    task_id='f',
+    bash_command='sleep ' + str(randrange(1, 3)),
+    dag=dag,
+)
+
+
+a >> [c1, c2, c3] >> [d, e]
+[b, d, e] >> [f]

@@ -94,5 +94,5 @@ f = BashOperator(
 )
 
 
-a >> [c1, c2, c3] >> [d, e]
-[b, d, e] >> [f]
+a >> [c_1, c_2, c_3] >> [d, e]
+f << [b, d, e]

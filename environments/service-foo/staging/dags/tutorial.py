@@ -95,4 +95,4 @@ f = BashOperator(
 
 
 a >> [c_1, c_2, c_3] >> [d, e]
-[b, d, e] >> [f]
+f << [b, d, e]

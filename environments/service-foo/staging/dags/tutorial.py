@@ -61,17 +61,17 @@ b = BashOperator(
 
 c_1 = BashOperator(
     task_id='c_1',
-    bash_command='sleep ' + str(randrange(1,31)),
+    bash_command='sleep ' + str(randrange(1, 31)),
     dag=dag,
 )
 c_2 = BashOperator(
     task_id='c_2',
-    bash_command='sleep ' + str(randrange(1,31)),
+    bash_command='sleep ' + str(randrange(1, 31)),
     dag=dag,
 )
 c_3 = BashOperator(
     task_id='c_3',
-    bash_command='sleep ' + str(randrange(1,31)),
+    bash_command='sleep ' + str(randrange(1, 31)),
     dag=dag,
 )
 

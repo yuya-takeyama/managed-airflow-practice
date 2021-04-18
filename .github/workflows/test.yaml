@@ -26,17 +26,21 @@ jobs:
         with:
           python-version: '3.7.x'
 
+      - name: Get Python purelib dir
+        id: python-purelib
+        run: python -c 'import sysconfig; print("::set-output name=dir::" + sysconfig.get_paths()["purelib"])'
       - name: Get pip cache dir
         id: pip-cache
         run: echo "::set-output name=dir::$(pip cache dir)"
-
       - name: pip cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ matrix.environment }}-${{ hashFiles(format('{0}/requirements.txt', matrix.environment)) }}
+          path: |
+            ${{ steps.python-purelib.outputs.dir }}
+            ${{ steps.pip-cache.outputs.dir }}
+          key: v2-${{ runner.os }}-pip-${{ matrix.environment }}-${{ hashFiles(format('{0}/requirements.txt', matrix.environment)) }}
           restore-keys: |
-            ${{ runner.os }}-pip-${{ matrix.environment }}-
+            v2-${{ runner.os }}-pip-${{ matrix.environment }}-
 
       - name: Install requirements
         run: |

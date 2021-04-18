@@ -1,0 +1,13 @@
+name: test-dags
+description: Test Airflow DAG files and show errors
+
+inputs:
+  environment-path:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: action
+      run: python '${{ github.action_path }}/test_dags.py' '${{ inputs.environment-path }}'
+      shell: bash

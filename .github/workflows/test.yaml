@@ -54,11 +54,9 @@ jobs:
           pip install flake8
           echo "::endgroup::"
 
-      - name: Test Airflow DAGs
-        run: |
-          for file in dags/*.py; do
-            python "$file"
-          done
+      - uses: ./.github/actions/test-dags
+        with:
+          environment-path: ${{ matrix.environment }}
 
       - uses: rbialon/flake8-annotations@v1
       - name: Lint with flake8

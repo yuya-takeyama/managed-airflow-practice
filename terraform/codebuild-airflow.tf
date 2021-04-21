@@ -108,8 +108,8 @@ data "aws_iam_policy_document" "codebuild-airflow-s3" {
       "s3:DeleteObject",
     ]
     resources = [
-      "arn:aws:s3:::yuyat-apache-airflow-test",
-      "arn:aws:s3:::yuyat-apache-airflow-test/*",
+      aws_s3_bucket.bucket.arn,
+      "${aws_s3_bucket.bucket.arn}/*",
     ]
   }
 }

@@ -147,7 +147,7 @@ resource "aws_mwaa_environment" "this" {
     subnet_ids         = var.subnet_ids
   }
 
-  source_bucket_arn = "arn:aws:s3:::yuyat-apache-airflow-test"
+  source_bucket_arn = var.source_bucket_arn
 
   webserver_access_mode = var.webserver_access_mode
 

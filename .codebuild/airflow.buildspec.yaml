@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   secrets-manager:
-    GITHUB_TOKEN: codebuild/managed-airflow-practice:GITHUB_TOKEN
+    GITHUB_TOKEN: codebuild/mwaa:GITHUB_TOKEN
 
 phases:
   build:

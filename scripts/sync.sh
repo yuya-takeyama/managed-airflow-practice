@@ -3,4 +3,4 @@
 set -eu
 set -o pipefail
 
-aws s3 sync --delete environments s3://yuyat-apache-airflow-test
+aws s3 sync --delete environments s3://yuyat-test-mwaa

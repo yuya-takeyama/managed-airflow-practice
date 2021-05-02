@@ -15,7 +15,9 @@ phases:
         fi
 
         if [ "$DRY_RUN" = "true" ]; then
+          echo "Running dry-run mode"
           ./scripts/airflow/dryrun.sh
         else
+          echo "Running deploy"
           ./scripts/airflow/sync.sh
         fi
